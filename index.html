@@ -2,680 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Sweeps Calculator Pro</title>
-    <style>
-        :root {
-            /* Modern Professional Color Palette */
-            --primary: #2563eb;       /* Royal Blue */
-            --primary-hover: #1d4ed8;
-            --secondary: #64748b;     /* Slate */
-            --bg: #f8fafc;            /* Light Gray Blue */
-            --card: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning-bg: #fffbeb;
-            --warning-text: #b45309;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            background: var(--card);
-            width: 100%;
-            max-width: 600px;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border);
-        }
-
-        /* Header */
-        header { text-align: center; margin-bottom: 30px; }
-        h1 { margin: 0; font-size: 1.5rem; letter-spacing: -0.5px; color: var(--text-main); }
-        .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
-
-        /* Form Grid */
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .form-group { margin-bottom: 20px; }
-        
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
-        }
-
-        /* Inputs */
-        input[type="number"], select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            background: #fff;
-            transition: all 0.2s;
-            box-sizing: border-box;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* Input Group (Merged Inputs) */
-        .input-group { display: flex; }
-        .input-group input { border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: 0; }
-        .input-group select { width: 85px; border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #f1f5f9; font-weight: 500;}
-
-        /* Config Blocks */
-        .config-block {
-            background-color: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .config-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .helper-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; line-height: 1.3;}
-
-        /* Toggles */
-        .toggle-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .toggle-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            user-select: none;
-        }
-        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
-
-        /* Conditional Inputs */
-        .conditional-input { 
-            margin-top: 8px; 
-            padding-left: 28px; 
-            display: none; 
-            animation: fadeIn 0.2s ease-in-out;
-        }
-        .conditional-input.show { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Action Button */
-        .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 25px;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-            transition: transform 0.1s, box-shadow 0.1s;
-        }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-secondary {
-            background: var(--bg); color: var(--text-main); border: 1px solid var(--border);
-            padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-        }
-        .btn-secondary:hover { background: #e2e8f0; }
-
-        /* Results Area */
-        #result-area { display: none; margin-top: 30px; border-top: 2px solid var(--border); padding-top: 30px; }
-        
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .summary-card {
-            background: var(--warning-bg);
-            border: 1px solid #fcd34d;
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-        }
-        .summary-card.main { background: #eff6ff; border-color: #bfdbfe; }
-        .sc-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        .sc-value { font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin-top: 2px; }
-
-        /* Table */
-        .table-container { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        th { background: #f1f5f9; padding: 12px; text-align: left; font-weight: 600; color: var(--secondary); border-bottom: 1px solid var(--border); }
-        td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-main); }
-        tr:last-child td { border-bottom: none; }
-        tr:nth-child(even) { background-color: #f8fafc; }
-        .text-right { text-align: right; }
-        .font-mono { font-family: "Courier New", monospace; letter-spacing: -0.5px; }
-        .total-col { font-weight: 700; color: var(--primary); }
-
-        .notice-box {
-            background-color: var(--warning-bg); color: var(--warning-text);
-            padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; display: none;
-        }
-
-        @media (max-width: 500px) {
-            .grid-3 { grid-template-columns: 1fr; }
-            .grid-2 { grid-template-columns: 1fr; }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prize Distribution Calculator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Sweeps Calculator</h1>
-        <div class="subtitle">Professional Tournament Distribution</div>
+        <h1>Prize Calculator</h1>
+        <div class="subtitle">Tournament Distribution Manager</div>
     </header>
 
-    <!-- Financials -->
-    <div class="grid-3">
+    <div class="error-msg" id="errorBox"></div>
+
+    <!-- Financial Inputs -->
+    <div class="form-row">
         <div class="form-group">
-            <label for="players">Players</label>
-            <input id="players" type="number" min="1" placeholder="50">
+            <label for="totalPrize">Total Prize Pool (£)</label>
+            <input id="totalPrize" type="number" min="0" step="0.01" placeholder="e.g. 1000">
         </div>
         <div class="form-group">
-            <label for="cost">Entry (£)</label>
-            <input id="cost" type="number" step="0.01" min="0" placeholder="10.00">
-        </div>
-        <div class="form-group">
-            <label for="house">House %</label>
-            <input id="house" type="number" min="0" max="100" value="10">
+            <label for="totalPlayers">Total Players</label>
+            <input id="totalPlayers" type="number" min="1" placeholder="e.g. 50">
         </div>
     </div>
 
-    <!-- Structure -->
-    <div class="grid-2">
+    <!-- Tier Structure -->
+    <div class="form-row">
         <div class="form-group">
-            <label>Winners</label>
-            <div class="input-group">
+            <label>Total Winners</label>
+            <div class="input-group combined">
                 <input id="winnersVal" type="number" min="1" placeholder="5">
                 <select id="winnerMode">
-                    <option value="fixed">Fixed</option>
-                    <option value="percent">%</option>
+                    <option value="fixed">Fixed #</option>
+                    <option value="percent">% Players</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
-            <label>Tiers</label>
-            <div class="input-group">
-                <input id="tiersVal" type="number" min="1" value="1" placeholder="1">
-                <select id="tiersMode">
-                    <option value="fixed">Fixed</option>
-                    <option value="percent">%</option>
-                </select>
-            </div>
+            <label for="tierCount">Active Tiers</label>
+            <select id="tierCount">
+                <option value="1">1 (Diamond)</option>
+                <option value="2">2 (Diamond, Platinum)</option>
+                <option value="3" selected>3 (Dia, Plat, Gold)</option>
+                <option value="4">4 (Dia, Plat, Gold, Sil)</option>
+                <option value="5">5 (Dia, Plat, Gold, Sil, Bro)</option>
+            </select>
         </div>
     </div>
 
     <!-- Logic Configuration -->
     <div class="config-block">
-        <div class="config-header">
-            <label style="margin:0">Player Distribution (Structure)</label>
-        </div>
-        <div class="input-group">
-            <select id="playerDistStyle">
-                <option value="multiplier" selected>Multiplier (Pyramid)</option>
-                <option value="linear">Linear (Waterfall)</option>
-                <option value="equal">Equal (Flat)</option>
-            </select>
-            <input id="playerDistMult" type="number" step="0.1" value="2.0" placeholder="Factor" style="width: 80px;">
-        </div>
-        <div class="helper-text" id="playerHelpText">
-            Tier 2 has <strong>2.0x</strong> more players than Tier 1.
-        </div>
-    </div>
+        <label class="block-label">Distribution Strategy</label>
 
-    <div class="config-block">
-        <div class="config-header">
-            <label style="margin:0">Prize Distribution (Payout)</label>
-        </div>
-        <div class="input-group">
-            <select id="prizeDistStyle">
-                <option value="multiplier" selected>Multiplier (Geometric)</option>
-                <option value="linear">Linear (Waterfall)</option>
-                <option value="equal">Equal (Flat)</option>
-            </select>
-            <input id="prizeDistMult" type="number" step="0.1" value="2.0" placeholder="Factor" style="width: 80px;">
-        </div>
-        <div class="helper-text" id="prizeHelpText">
-            Tier 1 pays <strong>2.0x</strong> more than Tier 2.
-        </div>
-    </div>
-
-    <!-- Toggles -->
-    <div class="toggle-group">
-        <div>
-            <label class="toggle-label">
-                <input id="top3Solo" type="checkbox"> 
-                <span><strong>Top 3 Solo</strong> (1st, 2nd, 3rd get 1 player each)</span>
-            </label>
-        </div>
-        
-        <div>
-            <label class="toggle-label">
-                <input id="minPlayerToggle" type="checkbox"> 
-                <span><strong>Low Player Override</strong> (Winner Takes All)</span>
-            </label>
-            <div id="minPlayerInputArea" class="conditional-input">
-                 Trigger if players less than: <input id="minPlayerThreshold" type="number" value="10" style="width: 70px; padding: 5px; display:inline-block;">
+        <div class="strategy-row">
+            <div class="input-group split-group">
+                <span class="prefix">Money</span>
+                <select id="prizeDistStyle" title="How money is split">
+                    <option value="multiplier" selected>Multiplier</option>
+                    <option value="linear">Linear</option>
+                    <option value="equal">Equal</option>
+                </select>
+                <input id="prizeDistMult" type="number" step="0.1" value="2.0" placeholder="2.0">
             </div>
         </div>
 
-        <div>
-            <label class="toggle-label">
-                <input id="round10" type="checkbox"> 
-                <span>Round down to nearest <strong>10p</strong></span>
-            </label>
+        <div class="strategy-row">
+            <div class="input-group split-group">
+                <span class="prefix">Players</span>
+                <select id="playerDistStyle" title="How winners are split">
+                    <option value="multiplier" selected>Multiplier</option>
+                    <option value="linear">Linear</option>
+                    <option value="equal">Equal</option>
+                </select>
+                <input id="playerDistMult" type="number" step="0.1" value="2.0" placeholder="2.0">
+            </div>
+        </div>
+
+        <div class="helper-text" id="strategyHelp">
+            Configure how prizes and players are distributed across tiers.
         </div>
     </div>
 
     <button id="calcBtn" class="btn-primary">Calculate Distribution</button>
 
-    <!-- Results -->
+    <!-- Results Area -->
     <div id="result-area">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 style="margin:0;">Results</h3>
-            <button id="copyBtn" class="btn-secondary">Copy Summary</button>
+        <div class="summary-box">
+            <div class="summary-label">Total Prize Pool</div>
+            <div class="summary-val" id="res-total">£0.00</div>
+            <div class="summary-sub" id="res-sub">0 Winners / 0 Players</div>
         </div>
 
-        <div id="notice-box" class="notice-box"></div>
-        
-        <div class="summary-grid">
-            <div class="summary-card main">
-                <div class="sc-label">Net Prize Pool</div>
-                <div class="sc-value" id="res-net">£0.00</div>
-            </div>
-            <div class="summary-card">
-                <div class="sc-label">House Total</div>
-                <div class="sc-value" id="res-house">£0.00</div>
-            </div>
-            <div class="summary-card">
-                <div class="sc-label">Gross Pot</div>
-                <div class="sc-value" id="res-gross">£0.00</div>
-            </div>
-            <div class="summary-card">
-                <div class="sc-label">Winners / Players</div>
-                <div class="sc-value" id="res-counts">0 / 0</div>
-            </div>
-        </div>
-
-        <div class="table-container">
+        <div class="table-wrapper">
             <table>
                 <thead>
-                    <tr>
-                        <th width="15%">Tier</th>
-                        <th class="text-right" width="20%">Winners</th>
-                        <th class="text-right" width="30%">Prize Each</th>
-                        <th class="text-right" width="35%">Total Payout</th>
-                    </tr>
+                <tr>
+                    <th width="35%">Tier</th>
+                    <th class="text-right">Count</th>
+                    <th class="text-right">Prize Each</th>
+                    <th class="text-right">Total</th>
+                </tr>
                 </thead>
                 <tbody id="res-table-body"></tbody>
             </table>
         </div>
+
+        <button id="copyBtn" class="btn-secondary">Copy Summary to Clipboard</button>
     </div>
 </div>
 
-<script>
-    /**
-     * UTILITY: Formatting and Copying
-     */
-    const Utils = {
-        fmtMoney: (pence) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(pence / 100),
-        
-        copyToClipboard: (text) => {
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('copyBtn');
-                const originalText = btn.innerText;
-                btn.innerText = "Copied!";
-                setTimeout(() => btn.innerText = originalText, 2000);
-            });
-        }
-    };
-
-    /**
-     * CONTROLLER: UI Handling
-     */
-    const UI = {
-        init: () => {
-            // Logic to show/hide Multiplier Inputs and update Helper Text
-            const setupDynamicInput = (selectId, inputId, textId, type) => {
-                const sel = document.getElementById(selectId);
-                const inp = document.getElementById(inputId);
-                const txt = document.getElementById(textId);
-
-                const update = () => {
-                    const isMult = sel.value === 'multiplier';
-                    inp.style.display = isMult ? 'block' : 'none';
-                    
-                    if (type === 'player') {
-                        if (sel.value === 'equal') txt.innerHTML = "Every tier has an <strong>equal</strong> number of players.";
-                        else if (sel.value === 'linear') txt.innerHTML = "Players increase linearly (1, 2, 3...) down the list.";
-                        else txt.innerHTML = `Tier 2 has <strong>${inp.value}x</strong> more players than Tier 1.`;
-                    } else {
-                        if (sel.value === 'equal') txt.innerHTML = "Every tier gets the <strong>same</strong> prize amount.";
-                        else if (sel.value === 'linear') txt.innerHTML = "Prizes decrease linearly (3, 2, 1...) down the list.";
-                        else txt.innerHTML = `Tier 1 pays <strong>${inp.value}x</strong> more than Tier 2.`;
-                    }
-                };
-
-                sel.addEventListener('change', update);
-                inp.addEventListener('input', update);
-                update();
-            };
-
-            setupDynamicInput('playerDistStyle', 'playerDistMult', 'playerHelpText', 'player');
-            setupDynamicInput('prizeDistStyle', 'prizeDistMult', 'prizeHelpText', 'prize');
-
-            // Min Player Toggle Animation
-            const minToggle = document.getElementById('minPlayerToggle');
-            const minArea = document.getElementById('minPlayerInputArea');
-            minToggle.addEventListener('change', () => {
-                minArea.classList.toggle('show', minToggle.checked);
-            });
-        },
-
-        getInputs: () => {
-            const num = (id) => parseFloat(document.getElementById(id).value) || 0;
-            const int = (id) => parseInt(document.getElementById(id).value) || 0;
-            const bool = (id) => document.getElementById(id).checked;
-            const val = (id) => document.getElementById(id).value;
-
-            return {
-                players: Math.max(0, int('players')),
-                cost: num('cost'),
-                housePercent: num('house'),
-                winnerVal: num('winnersVal'),
-                winnerMode: val('winnerMode'),
-                tiersVal: num('tiersVal'),
-                tiersMode: val('tiersMode'),
-                playerDistStyle: val('playerDistStyle'),
-                playerDistMult: num('playerDistMult') || 1,
-                prizeDistStyle: val('prizeDistStyle'),
-                prizeDistMult: num('prizeDistMult') || 1,
-                isTop3Solo: bool('top3Solo'),
-                useMinThreshold: bool('minPlayerToggle'),
-                minThresholdVal: int('minPlayerThreshold'),
-                isRound10: bool('round10')
-            };
-        },
-
-        render: (data) => {
-            const area = document.getElementById('result-area');
-            const tbody = document.getElementById('res-table-body');
-            const notice = document.getElementById('notice-box');
-            
-            area.style.display = 'block';
-            tbody.innerHTML = '';
-
-            // Handle Errors
-            if (data.error) {
-                notice.style.display = 'block';
-                notice.style.backgroundColor = '#fee2e2';
-                notice.style.color = '#991b1b';
-                notice.innerText = data.error;
-                return;
-            }
-
-            // Notices
-            if (data.minThresholdTriggered) {
-                notice.style.display = 'block';
-                notice.style.backgroundColor = '#fffbeb';
-                notice.style.color = '#b45309';
-                notice.innerHTML = `<strong>Note:</strong> Player count (${data.playerCount}) is below ${data.thresholdLimit}. Reverted to "Winner Takes All".`;
-            } else {
-                notice.style.display = 'none';
-            }
-
-            // Summary Cards
-            document.getElementById('res-gross').innerText = Utils.fmtMoney(data.grossPot);
-            document.getElementById('res-net').innerText = Utils.fmtMoney(data.netPool);
-            document.getElementById('res-house').innerText = Utils.fmtMoney(data.houseTotal);
-            document.getElementById('res-counts').innerText = `${data.totalWinners} / ${data.playerCount}`;
-
-            // Table Rows
-            data.tiers.forEach((t, i) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="font-mono">Tier ${i + 1}</td>
-                    <td class="text-right">${t.count}</td>
-                    <td class="text-right font-mono">${Utils.fmtMoney(t.payout)}</td>
-                    <td class="text-right font-mono total-col">${Utils.fmtMoney(t.payout * t.count)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Leftovers
-            if (data.leftover > 0) {
-                const tr = document.createElement('tr');
-                tr.style.backgroundColor = '#f0fdf4';
-                tr.innerHTML = `
-                    <td colspan="3" style="font-size:0.85rem; color:#15803d; padding-left:15px;"><em>+ Undistributed pennies added to House</em></td>
-                    <td class="text-right font-mono" style="font-size:0.85rem; color:#15803d;"><em>${Utils.fmtMoney(data.leftover)}</em></td>
-                `;
-                tbody.appendChild(tr);
-            }
-
-            // Generate Copy Text
-            UI.currentResultText = UI.generateSummaryText(data);
-        },
-
-        generateSummaryText: (data) => {
-            let txt = `🏆 SWEEPS RESULTS\n`;
-            txt += `Players: ${data.playerCount} | Pot: ${Utils.fmtMoney(data.grossPot)}\n`;
-            txt += `Prize Pool: ${Utils.fmtMoney(data.netPool)}\n\n`;
-            data.tiers.forEach((t, i) => {
-                if(t.count > 0) txt += `Tier ${i+1}: ${t.count}x Winner(s) @ ${Utils.fmtMoney(t.payout)}\n`;
-            });
-            return txt;
-        }
-    };
-
-    /**
-     * LOGIC: Pure Math
-     */
-    const Calculator = {
-        compute: (cfg) => {
-            if (cfg.players <= 0 || cfg.cost < 0) return { error: "Invalid players or cost." };
-
-            // 1. Financials (in Pence)
-            const grossPot = Math.round(cfg.players * cfg.cost * 100);
-            const houseFee = Math.floor(grossPot * (cfg.housePercent / 100));
-            const netPool = grossPot - houseFee;
-
-            // 2. Determine Counts
-            let totalWinners = cfg.winnerMode === 'percent' 
-                ? Math.floor(cfg.players * (cfg.winnerVal / 100)) 
-                : Math.floor(cfg.winnerVal);
-            
-            let minThresholdTriggered = false;
-            if (cfg.useMinThreshold && cfg.players < cfg.minThresholdVal) {
-                totalWinners = 1;
-                minThresholdTriggered = true;
-            } else {
-                totalWinners = Math.max(1, Math.min(totalWinners, cfg.players));
-            }
-
-            let numTiers = 1;
-            if (!minThresholdTriggered) {
-                numTiers = cfg.tiersMode === 'percent'
-                    ? Math.floor(totalWinners * (cfg.tiersVal / 100))
-                    : Math.floor(cfg.tiersVal);
-            }
-            numTiers = Math.max(1, Math.min(numTiers, totalWinners));
-
-            // 3. Init Tiers
-            const tiers = Array.from({length: numTiers}, () => ({ count: 0, weight: 0, payout: 0 }));
-
-            // ------------------------------------------
-            // 4. DISTRIBUTE PLAYERS (Largest Remainder Method)
-            // ------------------------------------------
-            let winnersToDistribute = totalWinners;
-            let startIdx = 0;
-
-            // A. Top 3 Solo
-            if (cfg.isTop3Solo && !minThresholdTriggered) {
-                const soloCount = Math.min(3, numTiers, winnersToDistribute);
-                for (let i = 0; i < soloCount; i++) tiers[i].count = 1;
-                winnersToDistribute -= soloCount;
-                startIdx = soloCount;
-            }
-
-            // B. Distribute Remainder
-            const remainingTiers = numTiers - startIdx;
-            
-            if (remainingTiers > 0 && winnersToDistribute > 0) {
-                // Calculate ideal weights
-                let weights = [];
-                let totalW = 0;
-
-                for (let i = 0; i < remainingTiers; i++) {
-                    let w = 1;
-                    if (cfg.playerDistStyle === 'linear') w = i + 1;
-                    else if (cfg.playerDistStyle === 'multiplier') w = Math.pow(cfg.playerDistMult, i);
-                    weights.push({ idx: startIdx + i, w: w });
-                    totalW += w;
-                }
-
-                // 1st Pass: Assign Integers
-                let currentAssigned = 0;
-                weights.forEach(item => {
-                    item.ideal = (item.w / totalW) * winnersToDistribute;
-                    item.assigned = Math.floor(item.ideal);
-                    item.remainder = item.ideal - item.assigned;
-                    
-                    tiers[item.idx].count += item.assigned;
-                    currentAssigned += item.assigned;
-                });
-
-                // 2nd Pass: Distribute Remainder by largest fraction
-                let left = winnersToDistribute - currentAssigned;
-                weights.sort((a, b) => b.remainder - a.remainder); // Sort desc by fraction
-                
-                for (let i = 0; i < left; i++) {
-                    // Loop through sorted weights, adding 1 to highest fractions
-                    // Use modulo in case left > weights.length (rare edge case with strict math)
-                    const target = weights[i % weights.length];
-                    tiers[target.idx].count++;
-                }
-
-            } else if (winnersToDistribute > 0) {
-                // Dump in last tier if no tiers left
-                tiers[numTiers - 1].count += winnersToDistribute;
-            }
-
-            // ------------------------------------------
-            // 5. DISTRIBUTE MONEY
-            // ------------------------------------------
-            let totalShares = 0;
-            tiers.forEach((t, i) => {
-                if (t.count === 0) return;
-                let w = 1;
-                if (cfg.prizeDistStyle === 'linear') w = numTiers - i;
-                else if (cfg.prizeDistStyle === 'multiplier') w = Math.pow(cfg.prizeDistMult, numTiers - 1 - i);
-                
-                t.weight = w;
-                totalShares += (t.count * w);
-            });
-
-            if (totalShares <= 0) return { error: "Configuration Error: 0 prize shares." };
-
-            const valPerShare = Math.floor(netPool / totalShares);
-            let distributed = 0;
-
-            tiers.forEach(t => {
-                if(t.count > 0) {
-                    t.payout = Math.floor(valPerShare * t.weight);
-                    distributed += (t.payout * t.count);
-                }
-            });
-
-            // 6. Penny Rounding (Top Down)
-            let moneyLeft = netPool - distributed;
-            for (let i = 0; i < numTiers; i++) {
-                if (tiers[i].count > 0 && moneyLeft >= tiers[i].count) {
-                    tiers[i].payout += 1;
-                    moneyLeft -= tiers[i].count;
-                }
-            }
-
-            // 7. 10p Rounding
-            if (cfg.isRound10) {
-                let scrap = 0;
-                tiers.forEach(t => {
-                    const old = t.payout;
-                    const rounded = Math.floor(old / 10) * 10;
-                    t.payout = rounded;
-                    scrap += (old - rounded) * t.count;
-                });
-                scrap += moneyLeft;
-
-                // Redistribute scrap to highest tiers first? Or evenly? 
-                // Usually top tiers get the benefit in sweeps.
-                for (let i = 0; i < numTiers; i++) {
-                    const cost = tiers[i].count * 10;
-                    if (tiers[i].count > 0 && scrap >= cost) {
-                        tiers[i].payout += 10;
-                        scrap -= cost;
-                    }
-                }
-                moneyLeft = scrap;
-            }
-
-            return {
-                playerCount: cfg.players,
-                totalWinners,
-                grossPot, netPool,
-                houseTotal: houseFee + moneyLeft,
-                leftover: moneyLeft,
-                tiers,
-                minThresholdTriggered,
-                thresholdLimit: cfg.minThresholdVal
-            };
-        }
-    };
-
-    // App Start
-    UI.init();
-    document.getElementById('calcBtn').addEventListener('click', () => {
-        const results = Calculator.compute(UI.getInputs());
-        UI.render(results);
-    });
-    document.getElementById('copyBtn').addEventListener('click', () => {
-        if(UI.currentResultText) Utils.copyToClipboard(UI.currentResultText);
-    });
-
-</script>
+<script src="calculator.js" defer></script>
+<script src="ui.js" defer></script>
 </body>
 </html>
