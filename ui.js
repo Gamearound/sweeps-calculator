@@ -123,12 +123,15 @@ const UI = {
     // 2. CALCULATOR EXECUTION
     handleCalculate: () => {
         const players = parseInt(document.getElementById('totalPlayers').value) || 0;
-        const prize = parseFloat(document.getElementById('totalPrize').value) || 0;
+        const stake = parseFloat(document.getElementById('playerStake').value) || 0;
 
-        if (players <= 0 || prize <= 0) {
-            UI.renderError("Please enter a valid Prize Pool and Current Players count at the top.");
+        if (players <= 0) {
+            UI.renderError("Please enter a valid Player count.");
             return;
         }
+
+        // Calculate Total Prize Pool dynamically
+        const totalPrizePool = stake * players;
 
         // Find the correct bracket index based on Current Players
         const correctBracketIndex = BRACKETS.findIndex(b => {
@@ -141,7 +144,7 @@ const UI = {
             return;
         }
 
-        // *** THE FIX: Auto-switch UI to the calculated tab if they navigated away ***
+        // Auto-switch UI to the calculated tab if they navigated away
         if (UI.activeTabIndex !== correctBracketIndex) {
             UI.activeTabIndex = correctBracketIndex;
             UI.renderTabs();
@@ -152,7 +155,7 @@ const UI = {
 
         // Send rules to the calculator engine
         const inputs = {
-            prize: prize,
+            prize: totalPrizePool, // Sending the calculated pool
             players: players,
             winnersVal: correctBracket.winnersVal,
             winnerMode: correctBracket.winnerMode,
@@ -171,7 +174,7 @@ const UI = {
             UI.renderResults(result);
         }
     },
-
+    
     // 3. RENDER RESULTS
     renderError: (msg) => {
         const box = document.getElementById('errorBox');
