@@ -23,65 +23,80 @@
             <input id="totalPrize" type="number" min="0" step="0.01" placeholder="e.g. 1000">
         </div>
         <div class="form-group">
-            <label for="totalPlayers">Total Players</label>
-            <input id="totalPlayers" type="number" min="1" placeholder="e.g. 50">
+            <label for="totalPlayers">Current Players</label>
+            <input id="totalPlayers" type="number" min="1" placeholder="e.g. 15">
         </div>
     </div>
 
-    <!-- Tier Structure -->
-    <div class="form-row">
-        <div class="form-group">
-            <label>Total Winners</label>
-            <div class="input-group combined">
-                <input id="winnersVal" type="number" min="1" placeholder="5">
-                <select id="winnerMode">
-                    <option value="fixed">Fixed #</option>
-                    <option value="percent">% Players</option>
-                </select>
+    <!-- Dynamic Ruleset Tabs -->
+    <div class="tabs-container">
+        <div class="tabs-header" id="tabsHeader">
+            <!-- Tabs injected by JS -->
+        </div>
+
+        <div class="tab-content" id="tabContent">
+            <div class="section-title">Bracket Range</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Min Players</label>
+                    <input id="bracketMin" type="number" min="0" class="tab-input">
+                </div>
+                <div class="form-group">
+                    <label>Max Players (Blank for Unlimited)</label>
+                    <input id="bracketMax" type="number" min="1" class="tab-input" placeholder="100+">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="tierCount">Active Tiers</label>
-            <select id="tierCount">
-                <option value="1">1 (Diamond)</option>
-                <option value="2">2 (Diamond, Platinum)</option>
-                <option value="3" selected>3 (Dia, Plat, Gold)</option>
-                <option value="4">4 (Dia, Plat, Gold, Sil)</option>
-                <option value="5">5 (Dia, Plat, Gold, Sil, Bro)</option>
-            </select>
-        </div>
-    </div>
 
-    <!-- Logic Configuration -->
-    <div class="config-block">
-        <label class="block-label">Distribution Strategy</label>
-
-        <div class="strategy-row">
-            <div class="input-group split-group">
-                <span class="prefix">Money</span>
-                <select id="prizeDistStyle" title="How money is split">
-                    <option value="multiplier" selected>Multiplier</option>
-                    <option value="linear">Linear</option>
-                    <option value="equal">Equal</option>
-                </select>
-                <input id="prizeDistMult" type="number" step="0.1" value="2.0" placeholder="2.0">
+            <div class="section-title">Tier Structure</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Total Winners</label>
+                    <div class="input-group combined">
+                        <input id="winnersVal" type="number" min="1" class="tab-input">
+                        <select id="winnerMode" class="tab-input">
+                            <option value="fixed">Fixed #</option>
+                            <option value="percent">% Players</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tierCount">Active Tiers</label>
+                    <select id="tierCount" class="tab-input">
+                        <option value="1">1 (Gold)</option>
+                        <option value="2">2 (Gold, Silver)</option>
+                        <option value="3">3 (Gold, Silver, Bronze)</option>
+                        <option value="4">4 (Platinum, Gold, Silver, Bronze)</option>
+                        <option value="5">5 (Diamond, Platinum, Gold, Silver, Bronze)</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="strategy-row">
-            <div class="input-group split-group">
-                <span class="prefix">Players</span>
-                <select id="playerDistStyle" title="How winners are split">
-                    <option value="multiplier" selected>Multiplier</option>
-                    <option value="linear">Linear</option>
-                    <option value="equal">Equal</option>
-                </select>
-                <input id="playerDistMult" type="number" step="0.1" value="2.0" placeholder="2.0">
+            <div class="section-title">Distribution Logic</div>
+            <div class="config-block">
+                <div class="strategy-row">
+                    <div class="input-group split-group">
+                        <span class="prefix">Money</span>
+                        <select id="prizeDistStyle" class="tab-input">
+                            <option value="multiplier">Multiplier</option>
+                            <option value="linear">Linear</option>
+                        </select>
+                        <input id="prizeDistMult" type="number" step="0.1" class="tab-input">
+                    </div>
+                </div>
+
+                <div class="strategy-row">
+                    <div class="input-group split-group">
+                        <span class="prefix">Players</span>
+                        <select id="playerDistStyle" class="tab-input">
+                            <option value="multiplier">Multiplier</option>
+                            <option value="linear">Linear</option>
+                        </select>
+                        <input id="playerDistMult" type="number" step="0.1" class="tab-input">
+                    </div>
+                </div>
+
+                <div class="helper-text" id="strategyHelp"></div>
             </div>
-        </div>
-
-        <div class="helper-text" id="strategyHelp">
-            Configure how prizes and players are distributed across tiers.
         </div>
     </div>
 

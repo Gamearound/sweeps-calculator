@@ -228,3 +228,29 @@ tr:last-child td { border-bottom: none; }
     padding: 12px; border-radius: 8px; margin-bottom: 20px;
     display: none; font-weight: 600; border: 1px solid #fca5a5;
 }
+
+.tabs-container { margin-top: 25px; margin-bottom: 20px; }
+.tabs-header {
+    display: flex; gap: 8px; overflow-x: auto;
+    border-bottom: 2px solid var(--primary); padding-bottom: 0;
+}
+.tab-btn {
+    padding: 10px 15px; background: #e2e8f0; border: none;
+    border-radius: 8px 8px 0 0; cursor: pointer;
+    font-size: 0.85rem; font-weight: 700; color: var(--text-muted);
+    transition: all 0.2s ease; white-space: nowrap;
+}
+.tab-btn:hover { background: #cbd5e1; color: var(--text-main); }
+.tab-btn.active {
+    background: var(--primary); color: white;
+}
+.tab-content {
+    background: #fff; padding: 20px; border: 1px solid var(--border);
+    border-top: none; border-radius: 0 0 8px 8px;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+}
+.section-title {
+    font-size: 0.9rem; font-weight: 700; text-transform: uppercase;
+    color: var(--text-main); margin-bottom: 15px; letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border); padding-bottom: 5px;
+}
